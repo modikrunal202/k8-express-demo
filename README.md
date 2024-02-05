@@ -37,20 +37,52 @@ kubectl apply -f mongo-config.yaml
 
 It contains key-value pairs for configuring the MongoDB host and port, which are then injected into the respective pods as environment variables.
 
+### Host Persistent Volume
+
+A Persistent Volume (PV) in Kubernetes is a piece of storage provisioned by an administrator or dynamically by a StorageClass. It exists outside of any individual pod and has a lifecycle independent of any individual pod that uses the PV.
+
+This Persistent Volume configuration can be used to provide persistent storage for Kubernetes pods. Pods can claim this volume by specifying it in their Persistent Volume Claim (PVC) configuration.
+
+The PV is deployed using the following command:
+```bash
+kubectl apply -f host-pv.yaml
+```
+
+### Host Persistent Volume Claim
+
+A Persistent Volume Claim (PVC) is a request for storage by a user. It allows users to claim storage resources without having to worry about the underlying details of the storage implementation.
+
+This Persistent Volume Claim configuration is used by Kubernetes pods to request access to the corresponding Persistent Volume (host-pv).
+
+The PVC is deployed using the following command:
+```bash
+kubectl apply -f host-pvc.yaml
+```
+
 ## Usage
 To deploy the entire stack, follow these steps:
 
-1. Apply the ConfigMap for MongoDB configuration:
+1. Setup the Persistent Volume(PV) to store data
+```bash
+kubectl apply -f host-pv.yaml
+``` 
+
+2. Claim Persistent Volume 
+```bash
+kubectl apply -f host-pv.yaml
+```
+
+3. Apply the ConfigMap for MongoDB configuration:
 ```bash
 kubectl apply -f mongo-config.yaml
 ```
 
-2. Deploy the MongoDB pod:
+4. Deploy the MongoDB pod:
 ```bash
 kubectl apply -f mongo-db.yaml
 ```
 
-3. Deploy the Node.js application:
+5. Deploy the Node.js application:
 ```bash
 kubectl apply -f node-app.yaml
 ```
