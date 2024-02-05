@@ -1,41 +1,61 @@
-# Node.js Application Deployment
+# Kubernetes Deployment for Node.js and MongoDB
 
-This repository contains deployment files for running a Node.js application on Kubernetes.
+This repository contains Kubernetes deployment files for running a Node.js application with MongoDB on a Kubernetes cluster. 
 
-## Deployment
+## Deployment Overview
 
-To deploy the Node.js application, use the following command to apply the deployment YAML file:
+The deployment consists of two main components: the Node.js application and MongoDB. 
 
-```bash
-kubectl apply -f deployment-node-app.yaml
-```
+### Node.js Application Deployment
 
-## Starting Services
-After deploying the application, you'll need to start the associated services. Use the following command to apply the service YAML file:
+The Node.js application is deployed using the following deployment YAML file:
 
 ```bash
-kubectl apply -f service-node-app.yaml
+kubectl apply -f node-app.yaml
 ```
 
-This command will expose the deployed application internally or externally, depending on the service configuration.
+This file specifies the deployment configuration for the Node.js application, including the number of replicas, container image, and environment variables sourced from a ConfigMap.
 
-## Deleting Deployment
-If you need to remove the deployed application, you can use the following command to delete the deployment:
+### MongoDB Deployment
+
+The MongoDB instance is deployed using the following deployment YAML file:
 
 ```bash
-kubectl delete -f deployment-node-app.yaml
+kubectl apply -f mongo-db.yaml
 ```
 
-This command will remove all resources associated with the deployment, including pods and services.
+This file defines the deployment configuration for the MongoDB pod, including the container image and any necessary configuration.
 
-## Delete All
-Alternatively, if you want to delete all resources related to the application, including deployments and services, you can use the following command:
+### ConfigMap Usage
 
+Both the Node.js application and MongoDB deployments utilize environment variables sourced from a ConfigMap named mongo-config.
+
+The ConfigMap is deployed using the following command:
 ```bash
-kubectl delete all -l app=node-app
+kubectl apply -f mongo-config.yaml
 ```
 
-This command will delete all resources labeled with app=node-app, effectively removing the entire application stack.
+It contains key-value pairs for configuring the MongoDB host and port, which are then injected into the respective pods as environment variables.
+
+## Usage
+To deploy the entire stack, follow these steps:
+
+1. Apply the ConfigMap for MongoDB configuration:
+```bash
+kubectl apply -f mongo-config.yaml
+```
+
+2. Deploy the MongoDB pod:
+```bash
+kubectl apply -f mongo-db.yaml
+```
+
+3. Deploy the Node.js application:
+```bash
+kubectl apply -f node-app.yaml
+```
+
+The stack should now be up and running on your Kubernetes cluster.
 
 Feel free to explore the deployment and service YAML files for more configuration details and customize them according to your requirements.
 
