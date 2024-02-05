@@ -64,7 +64,7 @@ To deploy the entire stack, follow these steps:
 
 1. Setup the Persistent Volume(PV) to store data
 ```bash
-kubectl apply -f host-pv.yaml
+kubectl apply -f host-pvc.yaml
 ``` 
 
 2. Claim Persistent Volume 
